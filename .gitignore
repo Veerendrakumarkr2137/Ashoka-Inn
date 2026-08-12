@@ -51,4 +51,6 @@ supabase/.temp
 *.zip
 *.mp4
 ashok inn/
+apps/*/pnpm-lock.yaml
+
 
