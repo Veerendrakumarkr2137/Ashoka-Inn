@@ -1,0 +1,83 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap');
+
+@import "tailwindcss";
+
+@source "../../../../packages/ui/src";
+@source "../../../../packages/utils/src";
+
+/* ─── Hotel OS Admin Theme ────────────────────────────────────────── */
+:root {
+  /* SaaS Layout Variables */
+  --sidebar-width: 260px;
+  --header-height: 64px;
+
+  /* Premium SaaS Colors */
+  --bg-app: #F8F6F2;
+  --bg-sidebar: #0F172A; /* Navy 900 */
+  --bg-surface: #FCFBF8;
+  
+  --border-subtle: #E2E8F0;
+  --border-strong: #CBD5E1;
+  --border-sidebar: #1E293B;
+
+  --text-primary: #1B1B1B;
+  --text-secondary: #475569;
+  --text-muted: #6B7280;
+  
+  --text-sidebar: #CBD5E1;
+  --text-sidebar-hover: #F8F6F2;
+  
+  --accent-gold: #C8A96A;
+  --accent-blue: #3B82F6;
+  --accent-green: #2E6F57;
+  
+  --radius-card: 16px;
+  --radius-input: 12px;
+  --radius-button: 12px;
+
+  /* Typography */
+  --font-heading: 'Plus Jakarta Sans', system-ui, sans-serif;
+  --font-body: 'Inter', system-ui, sans-serif;
+  --font-nav: 'Plus Jakarta Sans', system-ui, sans-serif;
+  --font-numbers: monospace;
+}
+
+/* ─── Global Resets & Typography ───────────────────────────────── */
+body {
+  background-color: var(--bg-app);
+  color: var(--text-primary);
+  font-family: 'Inter', sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ─── Custom Scrollbar for Admin ───────────────────────────────── */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: #CBD5E1;
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #94A3B8;
+}
+
+.dark-scrollbar::-webkit-scrollbar-thumb {
+  background: #334155;
+}
+
+/* ─── Utilities ────────────────────────────────────────────────── */
+.glass-panel {
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.shadow-card {
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -2px rgba(0, 0, 0, 0.025);
+}
