@@ -1,0 +1,44 @@
+{
+  "name": "hotel-web",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev ",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "@ai-sdk/openai": "^4.0.20",
+    "@ai-sdk/react": "^4.0.40",
+    "@gsap/react": "^2.1.2",
+    "@hospitality-os/database": "workspace:*",
+    "@hospitality-os/types": "workspace:*",
+    "@hospitality-os/ui": "workspace:*",
+    "@hospitality-os/utils": "workspace:*",
+    "@supabase/ssr": "^0.12.3",
+    "@supabase/supabase-js": "^2.110.8",
+    "ai": "^7.0.37",
+    "framer-motion": "^12.0.0",
+    "gsap": "^3.15.0",
+    "jose": "^6.2.4",
+    "lenis": "^1.3.25",
+    "lottie-react": "^2.4.1",
+    "lucide-react": "^0.473.0",
+    "next": "15.1.5",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "split-type": "^0.3.4"
+  },
+  "devDependencies": {
+    "@hospitality-os/typescript-config": "workspace:*",
+    "@tailwindcss/postcss": "^4",
+    "@types/node": "^20",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "eslint": "^9",
+    "eslint-config-next": "15.1.5",
+    "tailwindcss": "^4",
+    "typescript": "^5"
+  }
+}

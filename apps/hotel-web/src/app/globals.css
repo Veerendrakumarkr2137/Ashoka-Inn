@@ -1,0 +1,370 @@
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400;1,600&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400;1,600&family=Inter:wght@300;400;500;600;700&family=Alex+Brush&display=swap');
+
+@import "tailwindcss";
+
+@source "../../../../packages/ui/src";
+@source "../../../../packages/utils/src";
+@source "..";
+
+/* ─── CSS Custom Properties (Design Tokens) ─────────────────── */
+:root {
+  /* Core Brand */
+  --color-primary: #0F172A;
+  --color-gold: #C8A96A;
+  --color-gold-light: #F8EDCF;
+  --color-gold-dark: #B88B3A;
+  --color-cream: #F8F6F2;
+  --color-white: #FCFBF8;
+
+  /* Text */
+  --color-text-primary: #1B1B1B;
+  --color-text-secondary: #475569;
+  --color-text-muted: #6B7280;
+  --color-text-disabled: #9CA3AF;
+
+  /* Surfaces */
+  --color-surface: #FCFBF8;
+  --color-surface-elevated: #FFFFFF;
+  --color-surface-glass: rgba(252, 251, 248, 0.08);
+  --color-background: #F8F6F2;
+
+  /* Borders */
+  --color-border: #E5E7EB;
+  --color-border-strong: #D1D5DB;
+  --color-border-focus: #C8A96A;
+
+  /* Status */
+  --color-success: #2E6F57;
+  --color-warning: #B7791F;
+  --color-danger: #8B1E2D;
+  --color-info: #3B82F6;
+
+  /* Typography — 3-Tier Luxury Editorial Hierarchy */
+  --font-heading: var(--font-cormorant), 'Cormorant Garamond', 'Playfair Display', Georgia, serif;
+  --font-playfair: 'Playfair Display', var(--font-cormorant), Georgia, serif;
+  --font-body: var(--font-inter), 'Inter', system-ui, sans-serif;
+  --font-nav: var(--font-inter), system-ui, sans-serif;
+  --font-script: var(--font-script), 'Alex Brush', cursive;
+
+  /* Spacing */
+  --navbar-height: 80px;
+
+  /* Border Radius */
+  --radius-button: 12px;
+  --radius-card: 16px;
+  --radius-image: 20px;
+  --radius-dialog: 20px;
+  --radius-panel: 24px;
+
+  /* Shadows */
+  --shadow-soft: 0 4px 12px rgba(15, 23, 42, 0.04);
+  --shadow-medium: 0 8px 24px rgba(15, 23, 42, 0.06);
+  --shadow-floating: 0 10px 40px rgba(15, 23, 42, 0.08);
+  --shadow-luxury: 0 20px 60px rgba(15, 23, 42, 0.12);
+  --shadow-gold: 0 0 0 1px rgba(200, 169, 106, 0.3), 0 8px 24px rgba(200, 169, 106, 0.15);
+}
+
+/* ─── Dark Mode ──────────────────────────────────────────────── */
+.dark {
+  --color-primary: #F7F5F2;
+  --color-background: #0A0F1C;
+  --color-surface: #111827;
+  --color-surface-elevated: #1F2937;
+  --color-border: #374151;
+  --color-border-strong: #4B5563;
+  --color-text-primary: #F9FAFB;
+  --color-text-secondary: #E5E7EB;
+  --color-text-muted: #9CA3AF;
+}
+
+/* ─── Base Resets ────────────────────────────────────────────── */
+@layer base {
+  * {
+    box-sizing: border-box;
+    border-color: var(--color-border);
+  }
+
+  html {
+    scroll-behavior: smooth;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  body {
+    background-color: var(--color-background);
+    color: var(--color-text-primary);
+    font-family: var(--font-body);
+    font-size: 16px;
+    line-height: 1.6;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-heading);
+    font-weight: 700;
+    line-height: 1.2;
+    letter-spacing: -0.025em;
+    color: var(--color-text-primary);
+  }
+
+  ::selection {
+    background: rgba(198, 169, 107, 0.25);
+    color: #0F172A;
+  }
+
+  /* Scrollbar styling */
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: #D1D5DB;
+    border-radius: 999px;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: #9CA3AF;
+  }
+
+  /* Focus visible ring */
+  :focus-visible {
+    outline: 2px solid var(--color-gold);
+    outline-offset: 2px;
+    border-radius: 4px;
+  }
+}
+
+/* ─── Component Layer ────────────────────────────────────────── */
+@layer components {
+
+  /* Luxury container */
+  .container-luxury {
+    @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
+  }
+
+  /* Section spacing */
+  .section-padding {
+    @apply py-16 md:py-24 lg:py-32;
+  }
+
+  /* Gold text gradient */
+  .text-gradient-gold {
+    background: linear-gradient(135deg, #C6A96B 0%, #E6C265 50%, #B8913A 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  /* Navy text gradient */
+  .text-gradient-navy {
+    background: linear-gradient(135deg, #0F172A 0%, #1E293B 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  /* Glassmorphism card */
+  .glass-card {
+    background: rgba(255, 255, 255, 0.08);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    box-shadow: var(--shadow-luxury);
+  }
+
+  /* Glassmorphism — dark bg version */
+  .glass-card-dark {
+    background: rgba(15, 23, 42, 0.7);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    box-shadow: var(--shadow-luxury);
+  }
+
+  /* Gold border accent */
+  .border-gold {
+    border: 1px solid rgba(198, 169, 107, 0.3);
+  }
+
+  /* Luxury button base */
+  .btn-luxury {
+    @apply inline-flex items-center justify-center gap-2;
+    @apply font-semibold tracking-wide;
+    @apply transition-all duration-300 ease-out;
+    @apply focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2;
+    @apply focus-visible:ring-[#C6A96B];
+  }
+
+  /* Hotel card image zoom container */
+  .img-zoom-container {
+    @apply overflow-hidden;
+  }
+
+  .img-zoom-container img {
+    @apply transition-transform duration-[600ms] ease-out;
+  }
+
+  .img-zoom-container:hover img {
+    @apply scale-105;
+  }
+
+  /* Animated gold underline for nav links */
+  .nav-link {
+    font-family: var(--font-nav);
+    @apply relative text-sm font-medium text-[#6B7280] transition-colors duration-200;
+  }
+
+  .nav-link::after {
+    content: '';
+    @apply absolute bottom-0 left-0 w-0 h-[2px] bg-[#C6A96B] transition-all duration-300 ease-out;
+  }
+
+  .nav-link:hover {
+    @apply text-[#111827];
+  }
+
+  .nav-link:hover::after,
+  .nav-link.active::after {
+    @apply w-full;
+  }
+
+  .nav-link.active {
+    @apply text-[#C6A96B];
+  }
+
+  /* Shimmer animation */
+  .shimmer {
+    background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+    background-size: 200% 100%;
+    animation: shimmer 1.5s infinite;
+  }
+
+  @keyframes shimmer {
+    0% { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
+  }
+
+  /* Gold divider */
+  .divider-gold {
+    @apply flex items-center gap-4 my-8;
+  }
+
+  .divider-gold::before,
+  .divider-gold::after {
+    content: '';
+    @apply flex-1 h-[1px] bg-gradient-to-r from-transparent to-[#C6A96B]/30;
+  }
+
+  .divider-gold::after {
+    @apply bg-gradient-to-l;
+  }
+
+  /* Page hero section */
+  .page-hero {
+    @apply relative min-h-[60vh] flex items-center justify-center overflow-hidden;
+    background: var(--color-primary);
+  }
+
+  /* Luxury input (used outside of the component package) */
+  .input-luxury {
+    @apply w-full rounded-[14px] border border-[#E5E7EB] bg-white px-4 py-3;
+    @apply text-sm text-[#111827] outline-none transition-all duration-200;
+    @apply placeholder:text-[#9CA3AF];
+    @apply focus:border-[#C6A96B] focus:shadow-[0_0_0_3px_rgba(198,169,107,0.12)];
+  }
+
+  /* Star rating */
+  .star-rating {
+    @apply flex items-center gap-0.5;
+  }
+
+  /* Pulsing gold dot (AI chat bubble, live indicator) */
+  .pulse-gold {
+    @apply relative;
+  }
+
+  .pulse-gold::after {
+    content: '';
+    @apply absolute inset-0 rounded-full bg-[#C6A96B] opacity-50 animate-ping;
+  }
+}
+
+/* ─── Utility Layer ──────────────────────────────────────────── */
+@layer utilities {
+  /* Font families */
+  .font-heading {
+    font-family: var(--font-heading);
+  }
+
+  .font-body {
+    font-family: var(--font-body);
+  }
+
+  .font-script {
+    font-family: var(--font-script);
+  }
+
+  .font-nav {
+    font-family: var(--font-nav);
+  }
+
+  .font-numbers {
+    font-family: var(--font-numbers);
+  }
+
+  /* Letter spacing */
+  .tracking-luxury {
+    letter-spacing: 0.15em;
+  }
+
+  /* Hide scrollbar but keep functionality */
+  .scrollbar-hidden {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+
+  .scrollbar-hidden::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* Aspect ratios */
+  .aspect-room-card {
+    aspect-ratio: 4 / 3;
+  }
+
+  .aspect-hero {
+    aspect-ratio: 16 / 9;
+  }
+
+  /* Safe area insets (mobile) */
+  .pb-safe {
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+
+  /* Text balance */
+  .text-balance {
+    text-wrap: balance;
+  }
+
+  /* Luxury hover lift */
+  .hover-lift {
+    @apply transition-transform duration-300 ease-out hover:-translate-y-1;
+  }
+}
+
+/* ─── Lenis Smooth Scroll ────────────────────────────────────── */
+html.lenis {
+  height: auto;
+}
+
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
