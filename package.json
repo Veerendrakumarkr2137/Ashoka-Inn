@@ -1,0 +1,30 @@
+{
+  "name": "hospitality-os",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Enterprise AI-powered white-label Hotel Management Platform",
+  "scripts": {
+    "dev": "turbo dev",
+    "build": "turbo build",
+    "lint": "turbo lint",
+    "typecheck": "turbo typecheck",
+    "test": "turbo test",
+    "clean": "turbo clean && rimraf node_modules",
+    "format": "prettier --write \"**/*.{ts,tsx,md,json}\"",
+    "dev:web": "turbo dev --filter=hotel-web",
+    "dev:admin": "turbo dev --filter=admin",
+    "dev:gateway": "turbo dev --filter=gateway"
+  },
+  "devDependencies": {
+    "turbo": "^2.5.4",
+    "prettier": "^3.5.3",
+    "rimraf": "^6.0.1",
+    "@types/node": "^22.0.0",
+    "typescript": "^5.7.3"
+  },
+  "engines": {
+    "node": ">=22.0.0",
+    "pnpm": ">=11.0.0"
+  },
+  "packageManager": "pnpm@11.17.0"
+}

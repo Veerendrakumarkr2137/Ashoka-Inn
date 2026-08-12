@@ -1,0 +1,54 @@
+# Dependencies
+node_modules
+.pnp
+.pnp.js
+
+# Build outputs
+dist
+build
+.next
+out
+
+# Environment variables
+.env
+.env.local
+.env.*.local
+!.env.example
+
+# Turbo cache
+.turbo
+
+# Logs
+*.log
+npm-debug.log*
+pnpm-debug.log*
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.json
+.idea
+
+# Testing
+coverage
+.nyc_output
+playwright-report
+test-results
+
+# Prisma
+packages/database/generated
+
+# Supabase
+supabase/.branches
+supabase/.temp
+
+# Large Archives & Media
+*.7z
+*.zip
+*.mp4
+ashok inn/
+
