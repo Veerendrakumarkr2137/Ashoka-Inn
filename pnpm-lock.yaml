@@ -27,16 +27,16 @@ importers:
   apps/admin:
     dependencies:
       '@hospitality-os/database':
-        specifier: workspace:*
+        specifier: link:../../packages/database
         version: link:../../packages/database
       '@hospitality-os/types':
-        specifier: workspace:*
+        specifier: link:../../packages/types
         version: link:../../packages/types
       '@hospitality-os/ui':
-        specifier: workspace:*
+        specifier: link:../../packages/ui
         version: link:../../packages/ui
       '@hospitality-os/utils':
-        specifier: workspace:*
+        specifier: link:../../packages/utils
         version: link:../../packages/utils
       '@supabase/ssr':
         specifier: ^0.12.3
@@ -60,9 +60,6 @@ importers:
         specifier: ^19.0.0
         version: 19.2.4(react@19.2.4)
     devDependencies:
-      '@hospitality-os/typescript-config':
-        specifier: workspace:*
-        version: link:../../packages/typescript-config
       '@tailwindcss/postcss':
         specifier: ^4
         version: 4.3.3
@@ -100,16 +97,16 @@ importers:
         specifier: ^2.1.2
         version: 2.1.2(gsap@3.15.0)(react@19.2.4)
       '@hospitality-os/database':
-        specifier: workspace:*
+        specifier: link:../../packages/database
         version: link:../../packages/database
       '@hospitality-os/types':
-        specifier: workspace:*
+        specifier: link:../../packages/types
         version: link:../../packages/types
       '@hospitality-os/ui':
-        specifier: workspace:*
+        specifier: link:../../packages/ui
         version: link:../../packages/ui
       '@hospitality-os/utils':
-        specifier: workspace:*
+        specifier: link:../../packages/utils
         version: link:../../packages/utils
       '@supabase/ssr':
         specifier: ^0.12.3
@@ -117,6 +114,9 @@ importers:
       '@supabase/supabase-js':
         specifier: ^2.110.8
         version: 2.110.8
+      '@types/nodemailer':
+        specifier: ^8.0.1
+        version: 8.0.1
       ai:
         specifier: ^7.0.37
         version: 7.0.37(zod@4.4.3)
@@ -141,6 +141,9 @@ importers:
       next:
         specifier: 15.1.5
         version: 15.1.5(@babel/core@7.29.7(supports-color@7.2.0))(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
+      nodemailer:
+        specifier: ^9.0.5
+        version: 9.0.5
       react:
         specifier: ^19.0.0
         version: 19.2.4
@@ -151,9 +154,6 @@ importers:
         specifier: ^0.3.4
         version: 0.3.4
     devDependencies:
-      '@hospitality-os/typescript-config':
-        specifier: workspace:*
-        version: link:../../packages/typescript-config
       '@tailwindcss/postcss':
         specifier: ^4
         version: 4.3.3
@@ -1554,6 +1554,9 @@ packages:
   '@types/node@22.20.1':
     resolution: {integrity: sha512-EANqOCF9QFyra+4pfxUcX9STKJpCLjMbObVzljIJomAWSnuSIEAvyzEU53GaajbXJEgdh0iEcPL+DGvpUd4k1Q==}
 
+  '@types/nodemailer@8.0.1':
+    resolution: {integrity: sha512-PxpaInm8V1JQDd4j0ds5HfvWQk8JupS1C0Picb96QJsrrRDjBH+DlK7L4ZdNSqNULhiZRQHc40nLVShaGxXAMw==}
+
   '@types/react-dom@19.2.3':
     resolution: {integrity: sha512-jp2L/eY6fn+KgVVQAOqYItbF0VY/YApe5Mz2F0aykSO8gx31bYCZyvSeYxCHKvzHG5eZjc+zyaS5BrBWya2+kQ==}
     peerDependencies:
@@ -2146,6 +2149,7 @@ packages:
   eslint@9.39.5:
     resolution: {integrity: sha512-DgZS62aPLXKlnxILS/AYCoRvHaZeXceIzlXPkkGGzJWSow1aEk0lbTlxUSlyjC8jcaKxAdOnTDz+o1JFSBsyjw==}
     engines: {node: ^18.18.0 || ^20.9.0 || >=21.1.0}
+    deprecated: This version is no longer supported. Please see https://eslint.org/version-support for other options.
     hasBin: true
     peerDependencies:
       jiti: '*'
@@ -2745,6 +2749,10 @@ packages:
   node-releases@2.0.51:
     resolution: {integrity: sha512-wRNIrw4DmVLKQlbgOMdkMx27Wrpzes2hh5Jtbi2bjPd+4wJstWIqP5A+lscnqbm0xxmT5Bpg8Lec5ItEBwx6BQ==}
     engines: {node: '>=18'}
+
+  nodemailer@9.0.5:
+    resolution: {integrity: sha512-wvjiKvjczmsN7U/8006JOdXubgBk2XFAbioDMbT+sM7cPs0QrhJTa6KBRX7P5REGGkDcLUz/EarWidb8G8C1jQ==}
+    engines: {node: '>=6.0.0'}
 
   object-assign@4.1.1:
     resolution: {integrity: sha512-rJgTQnkUnH1sFw8yT6VSU3zD3sWmu6sZhIseY8VX+GRu3P6F7Fu+JNDoXfklElbLJSnc3FUQHVe4cU5hj+BcUg==}
@@ -4392,6 +4400,10 @@ snapshots:
     dependencies:
       undici-types: 6.21.0
 
+  '@types/nodemailer@8.0.1':
+    dependencies:
+      '@types/node': 22.20.1
+
   '@types/react-dom@19.2.3(@types/react@19.2.17)':
     dependencies:
       '@types/react': 19.2.17
@@ -5713,6 +5725,8 @@ snapshots:
 
   node-releases@2.0.51:
     optional: true
+
+  nodemailer@9.0.5: {}
 
   object-assign@4.1.1: {}
 

@@ -6,36 +6,42 @@ import { PhoneCall, Bot, MessageSquare, Sparkles, Phone, CheckCircle2, PhoneOff,
 export const dynamic = 'force-dynamic'
 
 export default async function AiCallsPage() {
-  const bookings = await prisma.booking.findMany({
-    include: { user: true, allocations: { include: { room: true } } },
-    orderBy: { checkIn: 'asc' },
-    take: 20,
+  const callSessions = await prisma.aiCallSession.findMany({
+    include: {
+      booking: {
+        include: {
+          user: true,
+          allocations: { include: { room: true } },
+        },
+      },
+    },
+    orderBy: { createdAt: 'desc' },
+    take: 30,
   })
 
-  // Map real database bookings into operational AI pre-arrival calls
-  const callsList = bookings.map((b, idx) => {
-    const isCheckedIn = b.status === 'CHECKED_IN'
-    const isConfirmed = b.status === 'CONFIRMED'
-    const isCancelled = b.status === 'CANCELLED'
-
-    let status = isCheckedIn ? 'Confirmed & Checked In' : isConfirmed ? 'Confirmed Arrival' : isCancelled ? 'Cancelled via AI' : 'Pending Call'
-    let outcome = isCheckedIn ? `Arrived at ${b.actualCheckIn ? new Date(b.actualCheckIn).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : '2:00 PM'}` : isConfirmed ? 'Confirmed arrival @ 2:30 PM' : 'No Answer'
-    let duration = idx % 2 === 0 ? '54s' : '1m 12s'
+  // Map real database AI call sessions
+  const callsList = callSessions.map((session) => {
+    const booking = session.booking
+    const durationSec = session.duration || 0
+    const durationStr = durationSec > 60 ? `${Math.floor(durationSec / 60)}m ${durationSec % 60}s` : `${durationSec}s`
 
     return {
-      id: b.id,
-      bookingRef: b.bookingRef,
-      guestName: b.user.name,
-      phone: b.user.phone || '+91 98765 43210',
-      roomNumber: b.allocations[0]?.room?.roomNumber || 'TBD',
-      checkInDate: new Date(b.checkIn).toLocaleDateString('en-IN', { month: 'short', day: '2-digit' }),
-      status,
-      outcome,
-      duration,
-      language: 'English / Hindi',
-      sentiment: isCancelled ? 'NEGATIVE' : 'POSITIVE',
+      id: session.id,
+      bookingId: booking?.id,
+      bookingRef: booking?.bookingRef || 'BKG-MOCK',
+      guestName: booking?.user?.name || 'Guest',
+      phone: booking?.user?.phone || '+91 98765 43210',
+      roomNumber: booking?.allocations[0]?.room?.roomNumber || 'TBD',
+      checkInDate: booking ? new Date(booking.checkIn).toLocaleDateString('en-IN', { month: 'short', day: '2-digit' }) : 'N/A',
+      status: session.status,
+      outcome: session.summary || 'Call Completed Successfully',
+      duration: durationStr,
+      language: session.language || 'en-IN',
+      sentiment: session.sentiment || 'NEUTRAL',
+      arrivalTime: session.arrivalTime || 'N/A',
     }
   })
+
 
   return (
     <div className="p-6 lg:p-10 max-w-7xl mx-auto space-y-6 animate-in fade-in duration-300">

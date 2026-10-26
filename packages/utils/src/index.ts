@@ -254,11 +254,52 @@ export function sleep(ms: number): Promise<void> {
   return new Promise((resolve) => setTimeout(resolve, ms))
 }
 
-// ─── Environment ─────────────────────────────────────────────
+// ─── Environment & Application Configuration ─────────────────
+export * from './hotelConfig'
+
 export function isDevelopment(): boolean {
+
   return process.env.NODE_ENV === 'development'
 }
 
 export function isProduction(): boolean {
   return process.env.NODE_ENV === 'production'
 }
+
+export function getEnv(key: string, fallback = ''): string {
+  return process.env[key] || fallback
+}
+
+export function getRequiredEnv(key: string): string {
+  const val = process.env[key]
+  if (!val) {
+    if (isProduction()) {
+      throw new Error(`[Configuration Error] Missing required environment variable: ${key}`)
+    }
+  }
+  return val || ''
+}
+
+export function getAppConfig() {
+  return {
+    nodeEnv: getEnv('NODE_ENV', 'development'),
+    hotelName: getEnv('NEXT_PUBLIC_HOTEL_NAME', 'Hotel Ashokha'),
+    appUrl: getEnv('NEXT_PUBLIC_APP_URL', 'http://localhost:3000'),
+    adminUrl: getEnv('NEXT_PUBLIC_ADMIN_URL', 'http://localhost:3001'),
+    databaseUrl: getRequiredEnv('DATABASE_URL'),
+    adminPassword: getEnv('ADMIN_PASSWORD', 'admin123'),
+    authSecret: getEnv('AUTH_SECRET', 'super-secret-auth-key-change-in-production'),
+    jwtSecret: getEnv('JWT_SECRET', 'super-secret-jwt-key-change-in-production'),
+    providers: {
+      voice: getEnv('VOICE_PROVIDER', 'mock'),
+      whatsapp: getEnv('WHATSAPP_PROVIDER', 'mock'),
+      email: getEnv('EMAIL_PROVIDER', 'mock'),
+      payment: getEnv('PAYMENT_PROVIDER', 'mock'),
+    },
+    n8n: {
+      baseUrl: getEnv('N8N_BASE_URL', 'http://localhost:5678'),
+      webhookSecret: getEnv('N8N_WEBHOOK_SECRET', 'n8n-secure-webhook-secret-key-12345'),
+    },
+  }
+}
+

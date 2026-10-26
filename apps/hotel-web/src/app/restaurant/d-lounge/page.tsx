@@ -12,7 +12,11 @@ export default function DLoungePage() {
   const [isModalOpen, setIsModalOpen] = useState(false)
   const defaultFallback = 'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?q=80&w=2940&auto=format&fit=crop'
   const venueImages = SITE_IMAGES.dining.dLounge || []
-  const heroImage = venueImages[0] || defaultFallback
+  const getLoopImg = (index: number) => {
+    if (!venueImages || venueImages.length === 0) return defaultFallback
+    return venueImages[index % venueImages.length] || defaultFallback
+  }
+  const heroImage = getLoopImg(0)
   const galleryImages = venueImages.length > 1 ? venueImages.slice(1) : venueImages
 
   const signatureStories = [
@@ -51,7 +55,7 @@ export default function DLoungePage() {
     <main className="bg-[#FAF8F5] min-h-screen pb-32 font-body selection:bg-[#C6A96B] selection:text-white">
 
       {/* 1. HERO (Full Screen Destination Reveal) */}
-      <div className="relative h-[88vh] min-h-[650px] w-full flex items-center justify-center bg-[#0F172A] overflow-hidden">
+      <div className="relative h-[75vh] sm:h-[88vh] min-h-[520px] sm:min-h-[650px] w-full flex items-center justify-center bg-[#0F172A] overflow-hidden">
         <div className="absolute inset-0 z-0 opacity-65">
           <Image 
             src={heroImage} 
@@ -64,10 +68,10 @@ export default function DLoungePage() {
         </div>
         <div className="absolute inset-0 bg-gradient-to-b from-[#0F172A]/70 via-[#0F172A]/40 to-[#FAF8F5] z-10" />
 
-        <div className="relative z-20 text-center px-4 max-w-4xl mx-auto pt-24">
+        <div className="relative z-20 text-center px-4 max-w-4xl mx-auto pt-16 sm:pt-24">
           
           {/* Integrated Clean Breadcrumb */}
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/10 backdrop-blur-md border border-white/15 text-xs text-white/80 font-semibold mb-6">
+          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/10 backdrop-blur-md border border-white/15 text-xs text-white/80 font-semibold mb-4 sm:mb-6">
             <Link href="/restaurant" className="hover:text-white flex items-center gap-1 transition-colors">
               <ArrowLeft size={13} /> Dining
             </Link>
@@ -75,21 +79,21 @@ export default function DLoungePage() {
             <span className="text-[#C6A96B]">D Lounge</span>
           </div>
 
-          <span className="text-[11px] font-bold tracking-[0.4em] text-[#C6A96B] uppercase mb-4 block">
+          <span className="text-[10px] sm:text-[11px] font-bold tracking-[0.3em] sm:tracking-[0.4em] text-[#C6A96B] uppercase mb-3 sm:mb-4 block">
             A Contemporary Dining Experience at Ashok Inn
           </span>
           <h1 
-            className="text-6xl sm:text-7xl md:text-8xl lg:text-9xl font-normal text-white mb-6 tracking-tight font-heading leading-none"
+            className="text-5xl sm:text-7xl md:text-8xl lg:text-9xl font-normal text-white mb-4 sm:mb-6 tracking-tight font-heading leading-none"
             style={{ fontFamily: 'var(--font-cormorant, serif)' }}
           >
             D Lounge
           </h1>
-          <p className="text-white/90 text-base sm:text-xl max-w-2xl mx-auto font-light leading-relaxed mb-10">
+          <p className="text-white/90 text-sm sm:text-xl max-w-2xl mx-auto font-light leading-relaxed mb-8 sm:mb-10">
             A contemporary multi-cuisine dining destination blending natural wooden textures, soft lighting, and regional culinary artistry.
           </p>
           <button 
             onClick={() => setIsModalOpen(true)}
-            className="bg-[#C6A96B] hover:bg-[#B8913A] text-white px-9 py-4 rounded-[14px] text-xs font-bold uppercase tracking-[0.2em] transition-all shadow-xl hover:-translate-y-[1px]"
+            className="bg-[#C6A96B] hover:bg-[#B8913A] text-white px-8 sm:px-9 py-3.5 sm:py-4 rounded-[14px] text-xs font-bold uppercase tracking-[0.2em] transition-all shadow-xl hover:-translate-y-[1px]"
             suppressHydrationWarning
           >
             Reserve Your Table
@@ -97,18 +101,18 @@ export default function DLoungePage() {
         </div>
       </div>
 
-      <div className="max-w-7xl mx-auto px-6 lg:px-12 space-y-32 pt-24">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-12 space-y-16 sm:space-y-32 pt-12 sm:pt-24">
 
         {/* 2. OVERLAPPING EDITORIAL SECTION (MAGAZINE STYLE 9.7/10 REFINED) */}
-        <section className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center">
+        <section className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-16 items-center">
           {/* Left Text Column */}
-          <ScrollReveal type="text" className="lg:col-span-6 space-y-6">
+          <ScrollReveal type="text" className="lg:col-span-6 space-y-5 sm:space-y-6">
             <span className="text-[11px] font-bold uppercase tracking-[0.35em] text-[#C6A96B] block">
               The Experience
             </span>
             
             <h2 
-              className="text-4xl sm:text-5xl lg:text-6xl font-heading text-[#0F172A] leading-[1.15] font-normal" 
+              className="text-3xl sm:text-5xl lg:text-6xl font-heading text-[#0F172A] leading-[1.15] font-normal" 
               style={{ fontFamily: 'var(--font-cormorant, serif)' }}
             >
               Where Taste Meets Warm Hospitality
@@ -149,11 +153,11 @@ export default function DLoungePage() {
           </ScrollReveal>
 
           {/* Right Overlapping Images Column (Restrained Overlap) */}
-          <div className="lg:col-span-6 relative pt-6 lg:pt-0">
+          <div className="lg:col-span-6 relative pt-4 lg:pt-0">
             {/* Primary Large Image */}
-            <ScrollReveal type="image" className="relative aspect-[4/3] w-full rounded-[32px] overflow-hidden shadow-2xl border border-black/5">
+            <ScrollReveal type="image" className="relative aspect-[4/3] w-full rounded-[24px] sm:rounded-[32px] overflow-hidden shadow-2xl border border-black/5">
               <Image 
-                src={heroImage} 
+                src={getLoopImg(1)} 
                 alt="D Lounge Dining Hall Interior" 
                 fill 
                 sizes="(max-width: 1024px) 100vw, 50vw"
@@ -161,13 +165,13 @@ export default function DLoungePage() {
               />
             </ScrollReveal>
 
-            {/* Overlapping Secondary Image */}
-            <ScrollReveal type="image" className="relative lg:absolute -mt-14 lg:mt-0 lg:-bottom-8 lg:-left-8 w-4/5 sm:w-2/3 aspect-[4/3] rounded-[28px] overflow-hidden shadow-2xl border-4 border-[#FAF8F5] z-20">
+            {/* Secondary Image (Clean stack on mobile, overlapping on desktop) */}
+            <ScrollReveal type="image" className="relative lg:absolute mt-4 lg:mt-0 lg:-bottom-8 lg:-left-8 w-full sm:w-2/3 aspect-[4/3] rounded-[24px] sm:rounded-[28px] overflow-hidden shadow-xl lg:shadow-2xl border-2 sm:border-4 border-[#FAF8F5] z-20">
               <Image 
-                src={SITE_IMAGES.dining.hikkups[0] || defaultFallback} 
+                src={getLoopImg(2)} 
                 alt="Illuminated Evening Bar at D Lounge" 
                 fill 
-                sizes="(max-width: 1024px) 70vw, 35vw"
+                sizes="(max-width: 1024px) 100vw, 35vw"
                 className="object-cover"
               />
             </ScrollReveal>
@@ -176,10 +180,10 @@ export default function DLoungePage() {
 
 
         {/* 3. THE ARCHITECTURE (Designed to Welcome) */}
-        <section className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center pt-8">
-          <ScrollReveal type="image" className="relative aspect-[4/3] lg:col-span-6 rounded-[32px] overflow-hidden shadow-xl">
+        <section className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center pt-4 sm:pt-8">
+          <ScrollReveal type="image" className="relative aspect-[4/3] lg:col-span-6 rounded-[24px] sm:rounded-[32px] overflow-hidden shadow-xl">
             <Image 
-              src={galleryImages[1] || heroImage} 
+              src={getLoopImg(3)} 
               alt="D Lounge Architecture Entrance" 
               fill 
               sizes="(max-width: 1024px) 100vw, 50vw"
@@ -187,7 +191,7 @@ export default function DLoungePage() {
             />
           </ScrollReveal>
 
-          <ScrollReveal type="text" className="lg:col-span-6 space-y-6">
+          <ScrollReveal type="text" className="lg:col-span-6 space-y-5 sm:space-y-6">
             <span className="text-[11px] font-bold uppercase tracking-[0.35em] text-[#C6A96B] block">
               Architectural Thought
             </span>
@@ -195,7 +199,7 @@ export default function DLoungePage() {
               Designed to Welcome
             </h3>
             <div className="w-12 h-[1px] bg-[#C6A96B]" />
-            <p className="text-[#6B7280] text-base leading-relaxed font-light">
+            <p className="text-[#6B7280] text-sm sm:text-base leading-relaxed font-light">
               From the open courtyard walkway to the grand welcoming entrance, D Lounge is architecturally planned to ease guests from the busy city into a calm, elevated dining atmosphere.
             </p>
             <div className="space-y-3 pt-2">
@@ -213,24 +217,24 @@ export default function DLoungePage() {
 
 
         {/* 4. CHEF'S PHILOSOPHY SECTION */}
-        <ScrollReveal type="text" className="bg-[#0F172A] text-white rounded-[36px] p-8 sm:p-16 border border-white/10 shadow-2xl grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+        <ScrollReveal type="text" className="bg-[#0F172A] text-white rounded-[28px] sm:rounded-[36px] p-6 sm:p-16 border border-white/10 shadow-2xl grid grid-cols-1 lg:grid-cols-12 gap-6 sm:gap-8 items-center">
           <div className="lg:col-span-4 flex flex-col items-center text-center lg:text-left lg:items-start space-y-4">
-            <div className="w-16 h-16 rounded-full bg-[#C6A96B]/20 flex items-center justify-center text-[#C6A96B]">
-              <ChefHat size={32} />
+            <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-full bg-[#C6A96B]/20 flex items-center justify-center text-[#C6A96B]">
+              <ChefHat size={28} />
             </div>
             <div>
               <span className="text-[10px] font-bold uppercase tracking-[0.3em] text-[#C6A96B] block mb-1">Chef’s Philosophy</span>
-              <h4 className="text-2xl font-heading font-normal" style={{ fontFamily: 'var(--font-cormorant, serif)' }}>
+              <h4 className="text-xl sm:text-2xl font-heading text-white font-bold" style={{ fontFamily: 'var(--font-cormorant, serif)' }}>
                 Crafted with Passion & Local Heritage
               </h4>
             </div>
           </div>
 
           <div className="lg:col-span-8 border-t lg:border-t-0 lg:border-l border-white/10 pt-6 lg:pt-0 lg:pl-8">
-            <p className="text-white/85 text-base sm:text-lg leading-relaxed font-light italic" style={{ fontFamily: 'var(--font-cormorant, serif)' }}>
+            <p className="text-white/90 text-sm sm:text-lg leading-relaxed font-light italic" style={{ fontFamily: 'var(--font-cormorant, serif)' }}>
               &ldquo;At D Lounge, every dish is prepared using fresh local ingredients, regional recipes, and modern culinary techniques that celebrate the rich flavours of Davangere and Karnataka.&rdquo;
             </p>
-            <span className="text-xs font-bold text-[#C6A96B] uppercase tracking-widest block mt-4">— Executive Chef Rajan</span>
+            <span className="text-xs font-bold text-[#C6A96B] uppercase tracking-widest block mt-3 sm:mt-4">— Executive Chef Rajan</span>
           </div>
         </ScrollReveal>
 
@@ -249,12 +253,12 @@ export default function DLoungePage() {
             </p>
           </div>
 
-          <div className="space-y-24">
+          <div className="space-y-12 sm:space-y-24">
             {signatureStories.map((story, idx) => {
               const isEven = idx % 2 === 0
               return (
-                <ScrollReveal key={story.title} type="text" className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-14 items-center">
-                  <div className={`relative aspect-[4/3] lg:col-span-7 rounded-[32px] overflow-hidden shadow-xl ${isEven ? 'lg:order-1' : 'lg:order-2'}`}>
+                <ScrollReveal key={story.title} type="text" className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-14 items-center">
+                  <div className={`relative aspect-[4/3] lg:col-span-7 rounded-[24px] sm:rounded-[32px] overflow-hidden shadow-xl ${isEven ? 'lg:order-1' : 'lg:order-2'}`}>
                     <Image 
                       src={story.image} 
                       alt={story.title} 
@@ -264,15 +268,15 @@ export default function DLoungePage() {
                     />
                   </div>
 
-                  <div className={`lg:col-span-5 space-y-4 ${isEven ? 'lg:order-2' : 'lg:order-1'}`}>
+                  <div className={`lg:col-span-5 space-y-3 sm:space-y-4 ${isEven ? 'lg:order-2' : 'lg:order-1'}`}>
                     <span className="text-[10px] font-bold uppercase tracking-[0.3em] text-[#C6A96B] block">
                       {story.subtitle}
                     </span>
-                    <h4 className="text-3xl sm:text-4xl font-heading text-[#0F172A] font-normal" style={{ fontFamily: 'var(--font-cormorant, serif)' }}>
+                    <h4 className="text-2xl sm:text-4xl font-heading text-[#0F172A] font-normal" style={{ fontFamily: 'var(--font-cormorant, serif)' }}>
                       {story.title}
                     </h4>
                     <div className="w-12 h-[1px] bg-[#C6A96B]" />
-                    <p className="text-[#6B7280] text-base leading-relaxed font-light">
+                    <p className="text-[#6B7280] text-sm sm:text-base leading-relaxed font-light">
                       {story.story}
                     </p>
                   </div>
@@ -284,19 +288,19 @@ export default function DLoungePage() {
 
 
         {/* 6. GUEST EXPERIENCE HIGHLIGHTS */}
-        <section className="bg-white rounded-[32px] p-8 sm:p-14 border border-black/5 shadow-lg space-y-10">
+        <section className="bg-white rounded-[28px] sm:rounded-[32px] p-6 sm:p-14 border border-black/5 shadow-lg space-y-8 sm:space-y-10">
           <div className="text-center max-w-xl mx-auto space-y-2">
             <span className="text-[10px] font-bold uppercase tracking-[0.3em] text-[#C6A96B]">The Complete Comfort</span>
-            <h3 className="text-3xl font-heading text-[#0F172A]" style={{ fontFamily: 'var(--font-cormorant, serif)' }}>
+            <h3 className="text-2xl sm:text-3xl font-heading text-[#0F172A]" style={{ fontFamily: 'var(--font-cormorant, serif)' }}>
               Everything Planned For Your Ease
             </h3>
           </div>
 
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4">
             {venueExperienceTags.map((tag) => (
-              <div key={tag} className="bg-[#FAF8F5] border border-black/5 rounded-[18px] p-4 text-center">
-                <CheckCircle2 size={18} className="text-[#C6A96B] mx-auto mb-2" />
-                <span className="text-xs font-bold text-[#0F172A] leading-tight block">{tag}</span>
+              <div key={tag} className="bg-[#FAF8F5] border border-black/5 rounded-[16px] sm:rounded-[18px] p-3.5 sm:p-4 text-center flex flex-col items-center justify-center">
+                <CheckCircle2 size={16} className="text-[#C6A96B] mx-auto mb-2 shrink-0" />
+                <span className="text-[11px] sm:text-xs font-bold text-[#0F172A] leading-tight block">{tag}</span>
               </div>
             ))}
           </div>
@@ -314,7 +318,7 @@ export default function DLoungePage() {
             </h3>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 sm:gap-6">
             {galleryImages.map((imgUrl, idx) => (
               <ScrollReveal key={idx} type="image" className="relative aspect-[4/3] rounded-[24px] overflow-hidden shadow-md group">
                 <Image 

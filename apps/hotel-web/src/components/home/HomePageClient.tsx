@@ -10,7 +10,7 @@ import { BookingWidget } from '@/components/booking/BookingWidget'
 import { LoadingScreen } from '@/components/Loader/LoadingScreen'
 import { 
   ArrowRight, Users, 
-  MapPin, Quote, Phone, Navigation, ArrowDown
+  MapPin, Quote, Phone, Navigation, ArrowDown, X
 } from 'lucide-react'
 import { SITE_IMAGES, getCategoryImages } from '@/config/siteImages'
 import { TableReservationModal } from '@/components/restaurant/TableReservationModal'
@@ -51,6 +51,7 @@ export function HomePageClient({ categories }: { categories: RoomCategoryData[] 
   const [activeGalleryTab, setActiveGalleryTab] = useState<'all' | 'rooms' | 'architecture' | 'dining' | 'courtyard'>('all')
   const [currentTestimonialIndex, setCurrentTestimonialIndex] = useState(0)
   const [isTableModalOpen, setIsTableModalOpen] = useState(false)
+  const [selectedImage, setSelectedImage] = useState<{ src: string; title: string; category?: string } | null>(null)
 
   // Listen for loader completion
   useEffect(() => {
@@ -617,32 +618,35 @@ export function HomePageClient({ categories }: { categories: RoomCategoryData[] 
 
 
       {/* CHAPTER 8 — CURATED GALLERY (THEMED CURATION) */}
-      <section className="py-28 md:py-36 bg-[#FAF8F5]">
-        <div className="max-w-7xl mx-auto px-6 lg:px-12">
+      {/* =================================================================== */}
+      {/* IMMERSIVE GALLERY: DYNAMIC LUXURY EDITORIAL MASONRY COLLAGE */}
+      {/* =================================================================== */}
+      <section className="py-24 md:py-36 bg-[#FAF8F5]">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-12">
           <div className="text-center max-w-3xl mx-auto mb-12">
-            <span className="text-xs font-bold tracking-[0.3em] text-[#C6A96B] uppercase block mb-4">
+            <span className="text-xs font-bold tracking-[0.3em] text-[#C6A96B] uppercase block mb-3">
               Curated Photography
             </span>
-            <h2 className="text-4xl sm:text-6xl font-heading text-[#0F172A] font-normal mb-8" style={{ fontFamily: 'var(--font-playfair, serif)' }}>
+            <h2 className="text-3xl sm:text-5xl md:text-6xl font-heading text-[#0F172A] font-normal mb-8" style={{ fontFamily: 'var(--font-cormorant, serif)' }}>
               Immersive Gallery
             </h2>
 
             {/* Gallery Category Filter Tabs */}
-            <div className="flex flex-wrap justify-center gap-3">
+            <div className="flex flex-wrap justify-center gap-2 sm:gap-3">
               {[
-                { id: 'all', label: 'All' },
-                { id: 'rooms', label: 'Rooms' },
+                { id: 'all', label: 'All Showcase' },
+                { id: 'rooms', label: 'Rooms & Suites' },
                 { id: 'architecture', label: 'Architecture' },
-                { id: 'dining', label: 'Dining' },
+                { id: 'dining', label: 'Dining & BBQ' },
                 { id: 'courtyard', label: 'Courtyard' },
               ].map((tab) => (
                 <button
                   key={tab.id}
                   onClick={() => setActiveGalleryTab(tab.id as any)}
-                  className={`px-5 py-2 rounded-full text-xs font-medium transition-all duration-250 ${
+                  className={`px-5 py-2.5 rounded-full text-xs font-medium uppercase tracking-wider transition-all duration-300 ${
                     activeGalleryTab === tab.id
-                      ? 'bg-[#0F172A] text-white shadow-md'
-                      : 'bg-white text-[#6B7280] hover:text-[#0F172A] border border-black/5'
+                      ? 'bg-[#0F172A] text-white shadow-lg shadow-black/10 scale-105'
+                      : 'bg-white text-[#6B7280] hover:text-[#0F172A] border border-black/5 hover:border-[#C6A96B]/30'
                   }`}
                   suppressHydrationWarning
                 >
@@ -652,27 +656,104 @@ export function HomePageClient({ categories }: { categories: RoomCategoryData[] 
             </div>
           </div>
 
-          {/* Micro-scale hover: 1.0 -> 1.02 | 6px caption slide */}
-          <motion.div layout className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            <AnimatePresence>
-              {filteredGallery.map((item, idx) => (
-                <motion.div
-                  key={item.title}
-                  layout
-                  initial={{ opacity: 0, scale: 0.98 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  exit={{ opacity: 0, scale: 0.98 }}
-                  transition={{ duration: 0.35 }}
-                  className="relative aspect-[4/3] rounded-[24px] overflow-hidden group shadow-md"
-                >
-                  <Image src={item.src} alt={item.title} fill sizes="(max-width: 768px) 100vw, 33vw" className="object-cover transition-transform duration-350 group-hover:scale-[1.02]" />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-all duration-350 p-6 flex items-end">
-                    <span className="text-white font-heading font-bold text-sm transform transition-transform duration-350 group-hover:-translate-y-1.5">{item.title}</span>
-                  </div>
-                </motion.div>
-              ))}
+          {/* PERFECT SQUARE & RECTANGLE MATRIX COLLAGE GRID */}
+          <motion.div layout className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6 auto-rows-[250px] sm:auto-rows-[280px]">
+            <AnimatePresence mode="popLayout">
+              {filteredGallery.map((item, idx) => {
+                const total = filteredGallery.length;
+                
+                // MATHEMATICALLY GUARANTEED PERFECT RECTANGLE / SQUARE MATRIX FORMULA
+                // Ensures zero trailing gaps, zero cutout holes, and a 100% flush flat bottom edge!
+                let gridClasses = "col-span-1 row-span-1";
+
+                if (total === 1) {
+                  gridClasses = "md:col-span-3 md:row-span-2";
+                } else if (total === 2) {
+                  gridClasses = idx === 0 ? "md:col-span-2 md:row-span-2" : "md:col-span-1 md:row-span-2";
+                } else if (idx === 0) {
+                  // Hero 2x2 Feature
+                  gridClasses = "md:col-span-2 md:row-span-2";
+                } else {
+                  const rem = (total - 3) % 3; // Remaining items after 2x2 + 2 side items
+                  const isLastItem = idx === total - 1;
+                  const isSecondLast = idx === total - 2;
+
+                  if (rem === 1 && isLastItem) {
+                    // Single trailing item -> Full-width panoramic banner across 3 columns!
+                    gridClasses = "md:col-span-3 md:row-span-1";
+                  } else if (rem === 2 && isSecondLast) {
+                    // 2 trailing items -> First takes 2 cols, second takes 1 col!
+                    gridClasses = "md:col-span-2 md:row-span-1";
+                  } else if (rem === 2 && isLastItem) {
+                    gridClasses = "md:col-span-1 md:row-span-1";
+                  }
+                }
+
+                return (
+                  <motion.div
+                    key={`${item.title}-${idx}`}
+                    layout
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, scale: 0.95 }}
+                    transition={{ duration: 0.4, delay: (idx % 6) * 0.05 }}
+                    onClick={() => {
+                      // Open fullscreen Lightbox modal
+                      setSelectedImage({ src: item.src, title: item.title, category: item.category });
+                    }}
+                    className={`group relative rounded-[28px] overflow-hidden cursor-pointer shadow-md hover:shadow-2xl transition-all duration-500 bg-[#0F172A] ${gridClasses}`}
+                  >
+                    {/* Image with smooth luxury zoom */}
+                    <Image
+                      src={item.src}
+                      alt={item.title}
+                      fill
+                      sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                      className="object-cover transition-transform duration-700 ease-out group-hover:scale-110"
+                    />
+
+                    {/* Gradient Dark Overlay */}
+                    <div className="absolute inset-0 bg-gradient-to-t from-[#0F172A]/90 via-[#0F172A]/20 to-transparent opacity-60 group-hover:opacity-85 transition-opacity duration-300" />
+
+                    {/* Top Gold Category Badge */}
+                    <div className="absolute top-4 left-4 z-10">
+                      <span className="px-3 py-1 bg-black/40 backdrop-blur-md border border-white/20 text-[9px] font-bold uppercase tracking-[0.25em] text-[#C6A96B] rounded-full">
+                        {item.category || 'Ashok Inn'}
+                      </span>
+                    </div>
+
+                    {/* Bottom Info & Zoom Icon */}
+                    <div className="absolute bottom-0 left-0 right-0 p-6 z-10 flex items-end justify-between transition-transform duration-300 transform translate-y-2 group-hover:translate-y-0">
+                      <div>
+                        <h3 className={`font-heading text-white font-bold drop-shadow-md leading-tight ${idx === 0 ? 'text-xl sm:text-2xl md:text-3xl' : 'text-base sm:text-lg'}`} style={{ fontFamily: 'var(--font-cormorant, serif)' }}>
+                          {item.title}
+                        </h3>
+                        <p className="text-white/70 text-[11px] font-light mt-1 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                          Click to expand view
+                        </p>
+                      </div>
+
+                      {/* Expand Button */}
+                      <div className="w-9 h-9 rounded-full bg-[#C6A96B] text-[#0F172A] flex items-center justify-center shrink-0 opacity-0 group-hover:opacity-100 transition-all duration-300 group-hover:scale-110 shadow-lg">
+                        <span className="text-base font-bold">+</span>
+                      </div>
+                    </div>
+                  </motion.div>
+                );
+              })}
             </AnimatePresence>
           </motion.div>
+
+          {/* View Full Gallery Link Button */}
+          <div className="text-center mt-12">
+            <Link
+              href="/gallery"
+              className="inline-flex items-center gap-3 px-8 py-4 bg-[#0F172A] hover:bg-[#C6A96B] text-white text-xs font-bold uppercase tracking-[0.2em] rounded-full transition-all duration-300 shadow-xl hover:-translate-y-0.5"
+            >
+              <span>Explore Complete Gallery ({filteredGallery.length} Photos)</span>
+              <ArrowRight size={14} />
+            </Link>
+          </div>
         </div>
       </section>
 
@@ -804,6 +885,59 @@ export function HomePageClient({ categories }: { categories: RoomCategoryData[] 
         isOpen={isTableModalOpen}
         onClose={() => setIsTableModalOpen(false)}
       />
+
+      {/* Fullscreen Luxury Lightbox Modal */}
+      <AnimatePresence>
+        {selectedImage && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={() => setSelectedImage(null)}
+            className="fixed inset-0 z-[500] bg-black/95 backdrop-blur-xl p-4 sm:p-8 flex items-center justify-center cursor-zoom-out"
+          >
+            <div 
+              onClick={(e) => e.stopPropagation()} 
+              className="relative max-w-5xl w-full max-h-[88vh] bg-[#0F172A] rounded-[32px] overflow-hidden border border-white/10 shadow-2xl flex flex-col cursor-default"
+            >
+              {/* Top Header Bar */}
+              <div className="p-4 sm:p-6 bg-black/40 backdrop-blur-md flex items-center justify-between border-b border-white/10">
+                <div className="flex items-center gap-3">
+                  <span className="px-3 py-1 bg-[#C6A96B]/20 border border-[#C6A96B]/40 text-[#C6A96B] text-[10px] font-bold uppercase tracking-widest rounded-full">
+                    {selectedImage.category || 'Curated Showcase'}
+                  </span>
+                  <h3 className="text-white font-heading text-lg sm:text-xl font-bold" style={{ fontFamily: 'var(--font-cormorant, serif)' }}>
+                    {selectedImage.title}
+                  </h3>
+                </div>
+                <button
+                  onClick={() => setSelectedImage(null)}
+                  className="w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center transition-colors"
+                >
+                  <X size={20} />
+                </button>
+              </div>
+
+              {/* Image Viewport */}
+              <div className="relative flex-1 min-h-[350px] sm:min-h-[500px] w-full bg-black/40">
+                <Image
+                  src={selectedImage.src}
+                  alt={selectedImage.title}
+                  fill
+                  priority
+                  className="object-contain p-2 sm:p-4"
+                />
+              </div>
+
+              {/* Bottom Caption Bar */}
+              <div className="p-4 bg-black/60 text-center text-xs text-white/70 border-t border-white/10 flex items-center justify-between px-6">
+                <span>Ashok Inn Davangere • Curated Collection</span>
+                <span className="text-[#C6A96B]">Press ESC or click anywhere to close</span>
+              </div>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </main>
   )
 }

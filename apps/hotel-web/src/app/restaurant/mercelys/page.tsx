@@ -12,7 +12,11 @@ export default function MercelysPage() {
   const [isModalOpen, setIsModalOpen] = useState(false)
   const defaultFallback = 'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?q=80&w=2940&auto=format&fit=crop'
   const venueImages = SITE_IMAGES.dining.mercelys || []
-  const heroImage = venueImages[0] || defaultFallback
+  const getLoopImg = (index: number) => {
+    if (!venueImages || venueImages.length === 0) return defaultFallback
+    return venueImages[index % venueImages.length] || defaultFallback
+  }
+  const heroImage = getLoopImg(0)
   const galleryImages = venueImages.length > 1 ? venueImages.slice(1) : venueImages
 
   const signatureStories = [
@@ -153,7 +157,7 @@ export default function MercelysPage() {
             {/* Primary Large Image */}
             <ScrollReveal type="image" className="relative aspect-[4/3] w-full rounded-[32px] overflow-hidden shadow-2xl border border-black/5">
               <Image 
-                src={heroImage} 
+                src={getLoopImg(1)} 
                 alt="Mercelys Parlour Street Facade" 
                 fill 
                 sizes="(max-width: 1024px) 100vw, 50vw"
@@ -164,7 +168,7 @@ export default function MercelysPage() {
             {/* Overlapping Secondary Image */}
             <ScrollReveal type="image" className="relative lg:absolute -mt-14 lg:mt-0 lg:-bottom-8 lg:-left-8 w-4/5 sm:w-2/3 aspect-[4/3] rounded-[28px] overflow-hidden shadow-2xl border-4 border-[#FAF8F5] z-20">
               <Image 
-                src={galleryImages[0] || defaultFallback} 
+                src={getLoopImg(2)} 
                 alt="Authentic Trikulfi Kulfi Sundae" 
                 fill 
                 sizes="(max-width: 1024px) 70vw, 35vw"
@@ -181,7 +185,7 @@ export default function MercelysPage() {
             <span className="text-[10px] font-bold uppercase tracking-[0.35em] text-[#C6A96B] block">
               Artisanal Creamery
             </span>
-            <h3 className="text-3xl sm:text-5xl font-heading font-normal leading-tight" style={{ fontFamily: 'var(--font-cormorant, serif)' }}>
+            <h3 className="text-3xl sm:text-5xl font-heading text-white font-bold leading-tight drop-shadow-sm" style={{ fontFamily: 'var(--font-cormorant, serif)' }}>
               Pure Dairy & Natural Flavors
             </h3>
             <p className="text-white/80 text-sm sm:text-base leading-relaxed font-light">
@@ -191,7 +195,7 @@ export default function MercelysPage() {
 
           <div className="relative aspect-[16/10] lg:col-span-7 rounded-[28px] overflow-hidden border border-white/10 shadow-lg">
             <Image 
-              src={galleryImages[1] || heroImage} 
+              src={getLoopImg(3)} 
               alt="Mercelys Ice Cream Display Counter" 
               fill 
               sizes="(max-width: 1024px) 100vw, 58vw"

@@ -2,12 +2,13 @@
 
 import React, { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
-import { Calendar, Users, ArrowRight, CheckCircle2, Search, ArrowLeft, Loader2, ShieldCheck, Coffee, Wifi } from 'lucide-react'
+import { Calendar, Users, ArrowRight, CheckCircle2, Search, ArrowLeft, Loader2, ShieldCheck, Coffee, Wifi, Phone, Mail, AlertTriangle } from 'lucide-react'
 import { Button } from '@hospitality-os/ui/src/components/Button'
 import { checkAvailability, createBooking } from '@/actions/booking'
 import Image from 'next/image'
 import { useSearchParams } from 'next/navigation'
 import { getCategoryImages } from '@/config/siteImages'
+import { generateVoucherHtml } from '@/lib/voucherReceipt'
 
 type Step = 1 | 2 | 3 | 4
 
@@ -106,9 +107,17 @@ export function BookingEngine() {
     }
   }, [initialCheckIn, initialCheckOut])
 
+  // Fully-Booked Convenience Notice State
+  const [fullyBookedData, setFullyBookedData] = useState<{
+    convenienceMessage: string
+    contactInfo: { phone: string; email: string }
+    availableAlternatives: Array<{ id: string; name: string; basePrice: number; capacity: number; availableRoomsCount: number }>
+  } | null>(null)
+
   const handleBook = async (e: React.FormEvent) => {
     e.preventDefault()
     setError(null)
+    setFullyBookedData(null)
     setLoading(true)
 
     const res = await createBooking({
@@ -126,8 +135,48 @@ export function BookingEngine() {
     if (res.success && res.bookingRef) {
       setBookingRef(res.bookingRef)
       setStep(4)
+    } else if (res.isFullyBooked) {
+      setFullyBookedData({
+        convenienceMessage: res.convenienceMessage || 'Room is fully booked for your selected dates.',
+        contactInfo: res.contactInfo || { phone: '+91 80 1234 5678', email: 'reservations@ashokinn.com' },
+        availableAlternatives: res.availableAlternatives || []
+      })
     } else {
       setError(res.error || 'Failed to create booking')
+    }
+  }
+
+  const handleDownloadVoucherPDF = () => {
+    const ref = bookingRef || 'BKG-ASHOK-9842'
+    const nights = getNights()
+    const totalPrice = currentRoomInfo.price * nights
+    const gst = Math.round(totalPrice * 0.12)
+    const grandTotal = totalPrice + gst
+    const checkInDate = checkIn ? new Date(checkIn).toLocaleDateString('en-IN', { day: 'numeric', month: 'long', year: 'numeric' }) : 'Jan 15, 2026'
+    const checkOutDate = checkOut ? new Date(checkOut).toLocaleDateString('en-IN', { day: 'numeric', month: 'long', year: 'numeric' }) : 'Jan 17, 2026'
+
+    const printWin = window.open('', '_blank', 'width=850,height=1000')
+    if (printWin) {
+      const htmlContent = generateVoucherHtml({
+        ref,
+        guestName,
+        guestEmail,
+        guestPhone,
+        roomName: currentRoomInfo.name,
+        maxGuests: currentRoomInfo.maxGuests,
+        checkInDate,
+        checkOutDate,
+        nights,
+        totalPrice,
+        gst,
+        grandTotal
+      })
+      printWin.document.write(htmlContent)
+      printWin.document.close()
+      setTimeout(() => {
+        printWin.focus()
+        printWin.print()
+      }, 300)
     }
   }
 
@@ -515,12 +564,101 @@ export function BookingEngine() {
         {/* STEP 3: Guest Details Form */}
         {step === 3 && (
           <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}>
-            <div className="flex items-center justify-between mb-6">
-              <h3 className="text-2xl font-heading text-[#0F172A]">Guest Information</h3>
-              <button onClick={() => setStep(1)} className="text-[#6B7280] hover:text-[#0F172A] text-sm font-medium flex items-center gap-1">
-                <ArrowLeft size={16} /> Edit Dates
-              </button>
-            </div>
+            {/* FULLY BOOKED CONVENIENCE NOTICE MODAL CARD */}
+            {fullyBookedData ? (
+              <div className="bg-white rounded-[28px] p-8 sm:p-10 border border-[#C6A96B]/30 shadow-2xl space-y-8 max-w-3xl mx-auto my-6 animate-in fade-in zoom-in-95 duration-300">
+                <div className="flex items-start gap-4">
+                  <div className="w-12 h-12 rounded-full bg-[#FAF8F5] border border-[#C6A96B]/30 flex items-center justify-center text-[#C6A96B] shrink-0">
+                    <AlertTriangle size={24} />
+                  </div>
+                  <div className="space-y-2">
+                    <span className="text-[10px] font-bold text-[#C6A96B] uppercase tracking-[0.25em]">Room Fully Booked Notice</span>
+                    <h3 className="text-2xl sm:text-3xl font-heading text-[#0F172A]" style={{ fontFamily: 'var(--font-cormorant, serif)' }}>
+                      We Apologize for the Inconvenience
+                    </h3>
+                    <p className="text-[#6B7280] text-sm leading-relaxed font-light">
+                      {fullyBookedData.convenienceMessage}
+                    </p>
+                  </div>
+                </div>
+
+                {/* Front Desk Priority Contact */}
+                <div className="bg-[#FAF8F5] rounded-[20px] p-5 border border-black/5 flex flex-col sm:flex-row items-center justify-between gap-4">
+                  <div>
+                    <span className="text-[10px] font-bold text-[#0F172A] uppercase tracking-wider block">Priority Front Desk Assistance</span>
+                    <p className="text-xs text-[#6B7280] mt-0.5">Call or email us directly to check instant cancellation openings.</p>
+                  </div>
+                  <div className="flex items-center gap-3 shrink-0">
+                    <a 
+                      href={`tel:${fullyBookedData.contactInfo.phone}`} 
+                      className="px-5 py-2.5 bg-[#0F172A] hover:bg-[#C6A96B] text-white text-xs font-bold rounded-[12px] transition-all flex items-center gap-2"
+                    >
+                      <Phone size={14} /> Call Front Desk
+                    </a>
+                    <a 
+                      href={`mailto:${fullyBookedData.contactInfo.email}`} 
+                      className="px-4 py-2.5 bg-white border border-black/10 text-[#0F172A] hover:bg-gray-50 text-xs font-semibold rounded-[12px] transition-all flex items-center gap-1.5"
+                    >
+                      <Mail size={14} /> Email Us
+                    </a>
+                  </div>
+                </div>
+
+                {/* Available Alternative Rooms */}
+                {fullyBookedData.availableAlternatives && fullyBookedData.availableAlternatives.length > 0 ? (
+                  <div className="space-y-4 pt-2 border-t border-black/5">
+                    <div>
+                      <span className="text-[10px] font-bold text-[#C6A96B] uppercase tracking-[0.2em]">Available Alternatives</span>
+                      <h4 className="text-lg font-heading text-[#0F172A]">Rooms Available For Your Selected Dates</h4>
+                    </div>
+
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                      {fullyBookedData.availableAlternatives.map(alt => (
+                        <div key={alt.id} className="bg-white rounded-[18px] p-5 border border-black/8 hover:border-[#C6A96B] shadow-sm hover:shadow-md transition-all flex flex-col justify-between space-y-3">
+                          <div>
+                            <span className="text-[9px] font-bold text-[#10B981] uppercase tracking-wider block mb-1">
+                              ✓ {alt.availableRoomsCount} {alt.availableRoomsCount === 1 ? 'Room' : 'Rooms'} Left
+                            </span>
+                            <h5 className="text-base font-bold text-[#0F172A]">{alt.name}</h5>
+                            <span className="text-xs text-[#6B7280]">Fits up to {alt.capacity} guests</span>
+                          </div>
+
+                          <div className="flex items-center justify-between pt-2 border-t border-black/5">
+                            <span className="text-base font-bold text-[#0F172A]">₹{alt.basePrice.toLocaleString()} <span className="text-[10px] text-[#6B7280] font-normal">/ night</span></span>
+                            <button
+                              onClick={() => {
+                                const cat = availableCategories.find(c => c.id === alt.id)
+                                if (cat) setSelectedCategory(cat)
+                                setFullyBookedData(null)
+                                setError(null)
+                              }}
+                              className="px-4 py-2 bg-[#C6A96B] hover:bg-[#B8913A] text-white text-xs font-bold rounded-[10px] transition-all flex items-center gap-1"
+                            >
+                              <span>Switch to This Room</span>
+                              <ArrowRight size={12} />
+                            </button>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                ) : (
+                  <div className="text-center py-4 border-t border-black/5">
+                    <p className="text-xs text-[#6B7280]">All room types are currently fully booked for these dates. Please try selecting different dates above.</p>
+                    <button onClick={() => { setFullyBookedData(null); setStep(1); }} className="mt-3 text-xs font-bold text-[#C6A96B] hover:underline">
+                      ← Change Check-in / Check-out Dates
+                    </button>
+                  </div>
+                )}
+              </div>
+            ) : (
+              <>
+                <div className="flex items-center justify-between mb-6">
+                  <h3 className="text-2xl font-heading text-[#0F172A]">Guest Information</h3>
+                  <button onClick={() => setStep(1)} className="text-[#6B7280] hover:text-[#0F172A] text-sm font-medium flex items-center gap-1">
+                    <ArrowLeft size={16} /> Edit Dates
+                  </button>
+                </div>
 
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
               
@@ -582,8 +720,8 @@ export function BookingEngine() {
                   <span className="font-bold text-xl text-[#0F172A]">₹{(currentRoomInfo.price * getNights()).toLocaleString()}</span>
                 </div>
               </div>
-
-            </div>
+            </>
+          )}
           </motion.div>
         )}
 
@@ -783,7 +921,7 @@ export function BookingEngine() {
             {/* ACTION BUTTONS */}
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
               <button 
-                onClick={() => alert(`Booking Voucher for ${bookingRef || 'BKG-ASHOK-9842'} has been prepared.`)}
+                onClick={handleDownloadVoucherPDF}
                 suppressHydrationWarning
                 className="py-3.5 px-4 bg-white hover:bg-gray-50 text-[#0F172A] text-xs font-bold uppercase tracking-wider rounded-[14px] border border-black/10 transition-all flex items-center justify-center gap-2 shadow-sm"
               >

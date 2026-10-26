@@ -14,7 +14,7 @@ export function AIChat() {
     {
       id: 'initial',
       role: 'assistant',
-      content: 'Welcome to Hotel Ashokha! I am your AI Concierge. How can I assist you with your stay today?'
+      content: 'Welcome to Hotel Ashok Inn Davangere! I am your AI Concierge. How can I assist you with your stay today?'
     }
   ])
   const [input, setInput] = useState('')
@@ -59,10 +59,13 @@ export function AIChat() {
             try {
               const text = JSON.parse(line.slice(2))
               setMessages(prev => {
-                const newMessages = [...prev]
-                const last = newMessages[newMessages.length - 1]
-                last.content += text
-                return newMessages
+                const lastIndex = prev.length - 1
+                return prev.map((msg, index) => {
+                  if (index === lastIndex) {
+                    return { ...msg, content: msg.content + text }
+                  }
+                  return msg
+                })
               })
             } catch (e) {}
           }

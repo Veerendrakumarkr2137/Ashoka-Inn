@@ -27,10 +27,10 @@ export const ROOMS_CONFIG: Record<string, RoomConfig> = {
     hasKettle: true,
     hasWater: true,
     images: [
-      // ➔ PASTE GOOGLE / EXTERNAL IMAGE URLS FOR DELUXE NON-AC HERE:
-      '/images/rooms/deluxe-non-ac/1.jpg',
-      '/images/rooms/deluxe-non-ac/2.jpg',
-      '/images/rooms/deluxe-non-ac/3.jpg',
+      'https://content3.jdmagicbox.com/v2/comp/davangere/q8/9999p8192.8192.230728112934.l2q8/catalogue/ashok-inn-pb-road-davangere-davangere-lodging-services-b4y9sipggj.jpg',
+      '/images/hotel/IMG-20260725-WA0004.jpg',
+      '/images/hotel/IMG-20260725-WA0007.jpg',
+      '/images/hotel/IMG-20260725-WA0010.jpg',
     ]
   },
 
@@ -47,10 +47,10 @@ export const ROOMS_CONFIG: Record<string, RoomConfig> = {
     hasKettle: true,
     hasWater: true,
     images: [
-      // ➔ PASTE GOOGLE / EXTERNAL IMAGE URLS FOR SUPERIOR AC HERE:
-      '/images/rooms/superior-ac/1.jpg',
-      '/images/rooms/superior-ac/2.jpg',
-      '/images/rooms/superior-ac/3.jpg',
+      '/images/hotel/IMG_20260725_120524.jpg',
+      '/images/hotel/IMG-20260725-WA0005.jpg',
+      '/images/hotel/IMG-20260725-WA0006.jpg',
+      '/images/hotel/IMG-20260725-WA0011.jpg',
     ]
   },
 
@@ -67,9 +67,11 @@ export const ROOMS_CONFIG: Record<string, RoomConfig> = {
     hasKettle: true,
     hasWater: true,
     images: [
-      'https://r2imghtlak.mmtcdn.com/r2-mmt-htl-image/room-imgs/201903230927305696-4476-72aea8b87dfb11e981ee0242ac110003.jpg?output-quality=75&downsize=*:500&crop=990:500',
-      'https://r2imghtlak.mmtcdn.com/r2-mmt-htl-image/htl-imgs/201903230927305696-e4c20f28d7dd11ec9fc40a58a9feac02.jpg?output-quality=75&downsize=*:500&crop=990:500',
-      'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSWShVsX1YP6WuXSO_ICD6-aqXr5Q5n5xyifi5MN3BADg&s',
+      '/images/hotel/IMG_20260725_120914.jpg',
+      '/images/hotel/IMG_20260725_120919.jpg',
+      '/images/hotel/family ac/IMG_20260725_121624.jpg',
+      '/images/hotel/family ac/IMG_20260725_121626.jpg',
+      '/images/hotel/family ac/IMG_20260725_121632.jpg',
     ]
   },
 
@@ -86,10 +88,14 @@ export const ROOMS_CONFIG: Record<string, RoomConfig> = {
     hasKettle: true,
     hasWater: true,
     images: [
-      // ➔ PASTE GOOGLE / EXTERNAL IMAGE URLS FOR KING SUITE HERE:
-      '/images/rooms/king-suite/1.jpg',
-      '/images/rooms/king-suite/2.jpg',
-      '/images/rooms/king-suite/3.jpg',
+      'https://content3.jdmagicbox.com/v2/comp/davangere/q8/9999p8192.8192.230728112934.l2q8/catalogue/ashok-inn-pb-road-davangere-davangere-lodging-services-b4y9sipggj.jpg',
+      '/images/rooms/king-suite/IMG_20260725_121206.jpg',
+      '/images/rooms/king-suite/IMG_20260725_121222.jpg',
+      '/images/rooms/king-suite/IMG_20260725_121224.jpg',
+      '/images/rooms/king-suite/IMG_20260725_121234.jpg',
+      '/images/rooms/king-suite/IMG_20260725_121245.jpg',
+      '/images/hotel/IMG_20260725_121414.jpg',
+      '/images/hotel/IMG_20260725_121419.jpg',
     ]
   }
 }
@@ -97,9 +103,16 @@ export const ROOMS_CONFIG: Record<string, RoomConfig> = {
 /**
  * Helper to get images for a category, preferring ROOMS_CONFIG image URLs if present
  */
+import { SITE_IMAGES } from './siteImages'
+
 export function getRoomImages(category: { id?: string; name: string; images?: { url: string }[] }): string[] {
   const slug = category.name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
   
+  // 1. Check SITE_IMAGES.rooms[slug] first for instant global sync!
+  if (SITE_IMAGES.rooms && SITE_IMAGES.rooms[slug as keyof typeof SITE_IMAGES.rooms] && SITE_IMAGES.rooms[slug as keyof typeof SITE_IMAGES.rooms].length > 0) {
+    return SITE_IMAGES.rooms[slug as keyof typeof SITE_IMAGES.rooms];
+  }
+
   const config = ROOMS_CONFIG[slug] || (category.id ? ROOMS_CONFIG[category.id] : null);
   
   if (config && config.images && config.images.length > 0) {
@@ -111,7 +124,7 @@ export function getRoomImages(category: { id?: string; name: string; images?: { 
   }
   
   return [
-    '/images/rooms/deluxe-non-ac/1.jpg',
-    '/images/rooms/deluxe-non-ac/2.jpg'
+    '/images/hotel/IMG_20260725_120524.jpg',
+    '/images/hotel/IMG-20260725-WA0004.jpg'
   ];
 }

@@ -25,7 +25,7 @@ export default function RestaurantOverviewPage() {
       name: 'D Lounge Restaurant',
       tagline: 'Multi-Cuisine Fine Dining',
       description: 'Our flagship dining destination offering a rich multi-cuisine menu for Breakfast, Lunch & Dinner. Enjoy regional South Indian tiffins, North Indian curries, and international gourmet cuisine.',
-      image: (SITE_IMAGES.dining.dLounge && SITE_IMAGES.dining.dLounge[0]) || defaultFallback,
+      image: (SITE_IMAGES.dining.dLounge && SITE_IMAGES.dining.dLounge[5]) || defaultFallback,
       hours: '7:00 AM – 11:30 PM',
       href: '/restaurant/d-lounge',
       venueKey: 'dLounge' as const,
@@ -36,7 +36,7 @@ export default function RestaurantOverviewPage() {
       name: 'Mercely’s Kefi Ice Cream',
       tagline: 'Premium Ice Creams & Trikulfi',
       description: 'A dedicated dessert parlour located at the hotel facade. Featuring Mercely’s Kefi ice cream scoops, authentic Trikulfi specialties, sundaes, and a sweet corner for families.',
-      image: (SITE_IMAGES.dining.mercelys && SITE_IMAGES.dining.mercelys[0]) || defaultFallback,
+      image: (SITE_IMAGES.dining.mercelys && SITE_IMAGES.dining.mercelys[2]) || defaultFallback,
       hours: '10:00 AM – 11:30 PM',
       href: '/restaurant/mercelys',
       venueKey: 'mercelys' as const,
@@ -47,7 +47,7 @@ export default function RestaurantOverviewPage() {
       name: 'The Hikkups BBQ & Bar',
       tagline: 'Signature Live BBQ & Cocktails',
       description: 'Our signature BBQ outlet and full-service lounge featuring live sizzlers, charcoal grilled meats and veggies, handcrafted cocktails, fine spirits, and evening music.',
-      image: (SITE_IMAGES.dining.hikkups && SITE_IMAGES.dining.hikkups[0]) || defaultFallback,
+      image: (SITE_IMAGES.dining.hikkups && SITE_IMAGES.dining.hikkups[2]) || defaultFallback,
       hours: '11:00 AM – 11:30 PM',
       href: '/restaurant/the-hikkups',
       venueKey: 'hikkups' as const,
@@ -58,7 +58,7 @@ export default function RestaurantOverviewPage() {
       name: '24×7 In-Room Dining',
       tagline: 'Round-The-Clock In-Room Care',
       description: 'Freshly prepared delicacies from D Lounge and The Hikkups, delivered straight to your room folio whenever you choose, 24 hours a day.',
-      image: (SITE_IMAGES.dining.roomService && SITE_IMAGES.dining.roomService[0]) || defaultFallback,
+      image: (SITE_IMAGES.dining.roomService && SITE_IMAGES.dining.roomService[4]) || defaultFallback,
       hours: 'Available 24 Hours / 7 Days',
       href: '/restaurant/room-service',
       venueKey: null,
@@ -72,10 +72,10 @@ export default function RestaurantOverviewPage() {
       {/* 1. Hero Section */}
       <div className="relative h-[70vh] min-h-[600px] w-full flex items-center justify-center bg-[#0F172A] overflow-hidden">
         <div className="absolute inset-0 z-0 opacity-55">
-          <Image 
-            src={(SITE_IMAGES.dining.dLounge && SITE_IMAGES.dining.dLounge[0]) || defaultFallback} 
-            alt="Dining at Ashok Inn Davangere" 
-            fill 
+          <Image
+            src={SITE_IMAGES.dining.heroBackground || (SITE_IMAGES.dining.dLounge && SITE_IMAGES.dining.dLounge[0]) || defaultFallback}
+            alt="Dining at Ashok Inn Davangere"
+            fill
             sizes="100vw"
             className="object-cover"
             priority
@@ -87,7 +87,7 @@ export default function RestaurantOverviewPage() {
           <span className="text-[11px] font-bold tracking-[0.35em] text-[#C6A96B] uppercase mb-4 block">
             Culinary Experiences
           </span>
-          <h1 
+          <h1
             className="text-5xl sm:text-7xl md:text-8xl font-normal text-white mb-6 tracking-tight font-heading leading-none"
             style={{ fontFamily: 'var(--font-cormorant, serif)' }}
           >
@@ -97,13 +97,13 @@ export default function RestaurantOverviewPage() {
             Four distinct culinary destinations crafted to offer unique gastronomic journeys.
           </p>
           <div className="flex items-center justify-center gap-4 flex-wrap">
-            <a 
-              href="#venues" 
+            <a
+              href="#venues"
               className="bg-[#0F172A] hover:bg-[#C6A96B] text-white px-8 py-4 rounded-[14px] text-xs font-bold uppercase tracking-[0.2em] transition-all shadow-lg hover:-translate-y-[1px]"
             >
               Explore All Venues
             </a>
-            <button 
+            <button
               onClick={() => openReservation('dLounge')}
               className="bg-white/10 hover:bg-white/20 backdrop-blur-md text-white border border-white/30 px-8 py-4 rounded-[14px] text-xs font-bold uppercase tracking-[0.2em] transition-all"
               suppressHydrationWarning
@@ -121,7 +121,7 @@ export default function RestaurantOverviewPage() {
           <span className="text-[11px] font-bold tracking-[0.3em] text-[#C6A96B] uppercase block mb-4">
             Four Distinct Destinations
           </span>
-          <h2 
+          <h2
             className="text-3xl sm:text-4xl md:text-5xl font-heading text-[#0F172A] font-normal leading-[1.3] tracking-tight mb-8"
             style={{ fontFamily: 'var(--font-cormorant, serif)' }}
           >
@@ -137,17 +137,17 @@ export default function RestaurantOverviewPage() {
         {venues.map((venue, idx) => {
           const isEven = idx % 2 === 0
           return (
-            <ScrollReveal 
-              key={venue.id} 
-              type="text" 
+            <ScrollReveal
+              key={venue.id}
+              type="text"
               className="bg-white rounded-[32px] overflow-hidden border border-black/5 shadow-xl grid grid-cols-1 lg:grid-cols-12 gap-0"
             >
               {/* Image Column */}
               <div className={`relative aspect-[4/3] lg:aspect-auto lg:col-span-6 group ${isEven ? 'lg:order-1' : 'lg:order-2'}`}>
-                <Image 
-                  src={venue.image || defaultFallback} 
-                  alt={venue.name} 
-                  fill 
+                <Image
+                  src={venue.image || defaultFallback}
+                  alt={venue.name}
+                  fill
                   sizes="(max-width: 1024px) 100vw, 50vw"
                   className="object-cover transition-transform duration-700 group-hover:scale-[1.03]"
                 />
@@ -159,8 +159,8 @@ export default function RestaurantOverviewPage() {
                   <span className="text-[10px] font-bold uppercase tracking-[0.3em] text-[#C6A96B] block mb-2">
                     0{idx + 1} • {venue.tagline}
                   </span>
-                  <h3 
-                    className="text-3xl sm:text-4xl font-heading text-[#0F172A] mb-4 font-normal" 
+                  <h3
+                    className="text-3xl sm:text-4xl font-heading text-[#0F172A] mb-4 font-normal"
                     style={{ fontFamily: 'var(--font-cormorant, serif)' }}
                   >
                     {venue.name}

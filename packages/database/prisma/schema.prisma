@@ -115,7 +115,9 @@ model Booking {
   orders        ServiceOrder[] // In-room dining, laundry
   notes         BookingNote[]
   folioCharges  FolioCharge[]
+  aiCallSessions AiCallSession[]
 }
+
 
 model BookingNote {
   id        String   @id @default(cuid())
@@ -309,4 +311,28 @@ model SystemSetting {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
+
+// ─── 7. AI RECEPTIONIST CALL SESSIONS & LOGS ───────────────────────────────────
+
+model AiCallSession {
+  id                 String    @id @default(cuid())
+  bookingId          String?
+  booking            Booking?  @relation(fields: [bookingId], references: [id], onDelete: SetNull)
+  provider           String    @default("mock") // mock, livekit, twilio
+  externalCallId     String?
+  status             String    @default("CREATED") // CREATED, STARTING, RINGING, CONNECTED, IN_PROGRESS, COMPLETED, NO_ANSWER, BUSY, FAILED, CANCELLED, ESCALATED
+  language           String    @default("en-IN")
+  startedAt          DateTime?
+  connectedAt        DateTime?
+  endedAt            DateTime?
+  duration           Int       @default(0) // seconds
+  summary            String?
+  sentiment          String?   @default("NEUTRAL") // POSITIVE, NEUTRAL, NEGATIVE, FRUSTRATED
+  arrivalTime        String?
+  escalationRequired Boolean   @default(false)
+  failureReason      String?
+  createdAt          DateTime  @default(now())
+  updatedAt          DateTime  @updatedAt
+}
+
 

@@ -2,8 +2,13 @@
 // HOSPITALITY OS — SHARED TYPE DEFINITIONS
 // ============================================================
 
-// ─── Multi-tenancy ───────────────────────────────────────────
+// ─── Multi-tenancy & White-label Config ──────────────────────
+export * from './hotel-config'
+export * from './ai-reception'
+
 export interface Tenant {
+
+
   id: string
   name: string
   subdomain: string
@@ -554,3 +559,94 @@ export interface Notification {
   isRead: boolean
   createdAt: Date
 }
+
+// ─── External Provider Interfaces ─────────────────────────────
+
+export interface VoiceCallParams {
+  toPhone: string
+  bookingRef?: string
+  guestName?: string
+  promptMessage?: string
+}
+
+export interface VoiceCallResult {
+  success: boolean
+  callId: string
+  status: 'QUEUED' | 'IN_PROGRESS' | 'COMPLETED' | 'FAILED'
+  recordingUrl?: string
+  transcript?: string
+  error?: string
+}
+
+export interface IVoiceProvider {
+  name: string
+  startOutboundCall(params: VoiceCallParams): Promise<VoiceCallResult>
+  getCallLog(callId: string): Promise<VoiceCallResult | null>
+  endCall(callId: string): Promise<boolean>
+}
+
+export interface WhatsAppMessageParams {
+  toPhone: string
+  templateName?: string
+  messageBody?: string
+  mediaUrl?: string
+  metadata?: Record<string, unknown>
+}
+
+export interface WhatsAppMessageResult {
+  success: boolean
+  messageId: string
+  status: 'SENT' | 'DELIVERED' | 'READ' | 'FAILED'
+  error?: string
+}
+
+export interface IWhatsAppProvider {
+  name: string
+  sendMessage(params: WhatsAppMessageParams): Promise<WhatsAppMessageResult>
+  sendVoucher(toPhone: string, bookingRef: string, voucherUrl: string): Promise<WhatsAppMessageResult>
+}
+
+export interface PaymentOrderParams {
+  amount: number
+  currency: string
+  bookingRef: string
+  customerEmail: string
+  customerPhone?: string
+}
+
+export interface PaymentOrderResult {
+  success: boolean
+  orderId: string
+  amount: number
+  currency: string
+  gateway: string
+  keyId?: string
+  error?: string
+}
+
+export interface PaymentVerifyParams {
+  orderId: string
+  paymentId: string
+  signature?: string
+}
+
+export interface IPaymentProvider {
+  name: string
+  createOrder(params: PaymentOrderParams): Promise<PaymentOrderResult>
+  verifyPayment(params: PaymentVerifyParams): Promise<{ success: boolean; transactionId: string }>
+  refundPayment(paymentId: string, amount: number): Promise<{ success: boolean; refundId: string }>
+}
+
+export interface EmailParams {
+  to: string
+  subject: string
+  htmlBody: string
+  textBody?: string
+  fromName?: string
+}
+
+export interface IEmailProvider {
+  name: string
+  sendEmail(params: EmailParams): Promise<{ success: boolean; messageId: string }>
+}
+

@@ -14,6 +14,7 @@ import { RoomAccordions } from '@/components/rooms/RoomAccordions'
 import { MobileBookingBarAndDrawer } from '@/components/booking/MobileBookingBarAndDrawer'
 import { SwipeGallery } from '@/components/ui/SwipeGallery'
 import { getCategoryImages } from '@/config/siteImages'
+import { RoomDetailActionsClient } from '@/components/rooms/RoomDetailActionsClient'
 
 // Next.js 15 requires awaiting params
 export default async function RoomDetailsPage(props: { params: Promise<{ id: string }> }) {
@@ -204,16 +205,14 @@ export default async function RoomDetailsPage(props: { params: Promise<{ id: str
                 Reserve Your Stay <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
               </Link>
               
-              <div className="flex flex-col gap-4 text-[#0F172A]">
-                <button className="flex items-center justify-between p-4 rounded-[12px] border border-black/5 hover:bg-[#FAF8F5] transition-colors text-xs font-semibold" suppressHydrationWarning>
-                  <span className="flex items-center gap-2"><Share2 size={16} className="text-[#C6A96B]" /> Share this room</span>
-                  <ChevronRight size={14} className="text-black/20" />
-                </button>
-                <button className="flex items-center justify-between p-4 rounded-[12px] border border-black/5 hover:bg-[#FAF8F5] transition-colors text-xs font-semibold" suppressHydrationWarning>
-                  <span className="flex items-center gap-2"><Heart size={16} className="text-[#C6A96B]" /> Add to Wishlist</span>
-                  <ChevronRight size={14} className="text-black/20" />
-                </button>
-              </div>
+              <RoomDetailActionsClient 
+                room={{
+                  id: category.id,
+                  name: category.name,
+                  basePrice: category.basePrice,
+                  image: getCategoryImages(category)[0] || 'https://images.unsplash.com/photo-1590490360182-c33d57733427?q=80&w=2874&auto=format&fit=crop'
+                }}
+              />
             </div>
           </div>
           
@@ -242,7 +241,7 @@ export default async function RoomDetailsPage(props: { params: Promise<{ id: str
                 <Link href={`/rooms/${room.id}`} className="block">
                   <div className="relative aspect-[4/3] rounded-[24px] overflow-hidden mb-6">
                     <Image 
-                      src={room.images[0]?.url || 'https://images.unsplash.com/photo-1590490360182-c33d57733427?q=80&w=2874&auto=format&fit=crop'} 
+                      src={getCategoryImages(room)[0] || 'https://images.unsplash.com/photo-1590490360182-c33d57733427?q=80&w=2874&auto=format&fit=crop'} 
                       alt={room.name} 
                       fill 
                       className="object-cover transition-transform duration-1000 group-hover:scale-105"

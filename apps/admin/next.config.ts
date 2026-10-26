@@ -24,6 +24,10 @@ if (fs.existsSync(envPath)) {
 const nextConfig: NextConfig = {
   transpilePackages: ['@hospitality-os/ui', '@hospitality-os/utils', '@hospitality-os/types'],
   serverExternalPackages: ['@prisma/client', '@hospitality-os/database'],
+  images: {
+    unoptimized: true,
+  },
+
   webpack: (config, { isServer }) => {
     if (isServer) {
       config.externals = config.externals || [];
@@ -34,5 +38,6 @@ const nextConfig: NextConfig = {
     return config;
   },
 };
+
 
 export default nextConfig;

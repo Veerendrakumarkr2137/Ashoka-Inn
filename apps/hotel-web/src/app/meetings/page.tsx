@@ -119,6 +119,58 @@ export default function MeetingsPage() {
           </ScrollReveal>
         </section>
 
+
+        {/* 360° INTERACTIVE VIRTUAL TOUR CARD */}
+        <section className="space-y-6">
+          <div className="text-center max-w-2xl mx-auto space-y-2">
+            <span className="text-[11px] font-bold uppercase tracking-[0.35em] text-[#C6A96B] block">
+              3D Virtual Tour
+            </span>
+            <h2 className="text-3xl sm:text-5xl font-heading text-[#0F172A] font-normal" style={{ fontFamily: 'var(--font-cormorant, serif)' }}>
+              Explore Meeting Space in 360°
+            </h2>
+            <p className="text-[#6B7280] text-sm sm:text-base font-light">
+              Take an interactive 3D virtual walk-through of Ashok Inn meeting halls, event venues, and facilities.
+            </p>
+          </div>
+
+          <div className="relative w-full rounded-[28px] sm:rounded-[36px] overflow-hidden shadow-2xl border border-black/10 bg-[#0F172A] p-8 sm:p-16 text-center text-white">
+            <div className="absolute inset-0 z-0 opacity-40">
+              <Image 
+                src={meetingHeroImage} 
+                alt="Executive Meeting Hall 360 Virtual Tour Cover" 
+                fill 
+                className="object-cover scale-105"
+              />
+            </div>
+            <div className="absolute inset-0 bg-gradient-to-t from-[#0F172A] via-[#0F172A]/70 to-[#0F172A]/40 z-10" />
+
+            <div className="relative z-20 max-w-2xl mx-auto space-y-6 flex flex-col items-center">
+              <div className="w-16 h-16 rounded-full bg-[#C6A96B]/20 border border-[#C6A96B]/40 flex items-center justify-center text-[#C6A96B] animate-pulse">
+                <Compass size={32} />
+              </div>
+
+              <h3 className="text-3xl sm:text-4xl font-heading text-white font-normal" style={{ fontFamily: 'var(--font-cormorant, serif)' }}>
+                Meeting Rooms 360° Virtual Experience
+              </h3>
+
+              <p className="text-white/80 text-sm sm:text-base font-light leading-relaxed">
+                Click below to launch the 360° interactive virtual walk-through of our executive meeting spaces and conference halls.
+              </p>
+
+              <a 
+                href="https://www.justdial.com/Davangere/Ashok-Inn-Beside-Ksrtc-Bus-Stop-Pb-Road-Davangere/9999P8192-8192-190305120331-U8E9_BZDET/gallery?tab=360+view" 
+                target="_blank" 
+                rel="noopener noreferrer" 
+                className="inline-flex items-center gap-3 bg-[#C6A96B] hover:bg-[#B8913A] text-white px-9 py-4 rounded-[16px] text-xs font-bold uppercase tracking-[0.2em] transition-all shadow-2xl hover:scale-105"
+              >
+                <span>Launch 360° Virtual Tour</span>
+                <ArrowRight size={16} />
+              </a>
+            </div>
+          </div>
+        </section>
+
         {/* 3. 6-FEATURE HIGHLIGHTS */}
         <section className="space-y-12">
           <div className="text-center max-w-2xl mx-auto">

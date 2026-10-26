@@ -2,6 +2,7 @@
 
 import { prisma } from '@hospitality-os/database'
 import { revalidatePath } from 'next/cache'
+import { sendBookingConfirmationEmail } from '@/lib/email'
 
 export async function checkAvailability(checkInStr: string, checkOutStr: string, guests: number) {
   try {
@@ -118,7 +119,54 @@ export async function createBooking(data: {
     const availableRoom = category.rooms.find(r => r.allocations.length === 0)
     
     if (!availableRoom) {
-      return { success: false, error: 'No rooms available for these dates.' }
+      // Find other room categories that ARE available for these dates
+      const allCategories = await prisma.roomCategory.findMany({
+        include: {
+          images: true,
+          rooms: {
+            include: {
+              allocations: {
+                where: {
+                  OR: [
+                    { checkIn: { gte: checkIn, lt: checkOut } },
+                    { checkOut: { gt: checkIn, lte: checkOut } },
+                    { checkIn: { lte: checkIn }, checkOut: { gte: checkOut } }
+                  ]
+                }
+              }
+            }
+          }
+        }
+      })
+
+      const availableAlternatives = allCategories
+        .filter(c => c.id !== data.categoryId && c.capacity >= data.guests)
+        .map(c => {
+          const avail = c.rooms.filter(r => r.allocations.length === 0)
+          return {
+            id: c.id,
+            name: c.name,
+            basePrice: c.basePrice,
+            capacity: c.capacity,
+            availableRoomsCount: avail.length
+          }
+        })
+        .filter(c => c.availableRoomsCount > 0)
+
+      const formatDate = (d: Date) => d.toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })
+
+      return { 
+        success: false, 
+        isFullyBooked: true,
+        roomName: category.name,
+        convenienceMessage: `We apologize for the inconvenience. ${category.name} is fully booked for your selected dates (${formatDate(checkIn)} – ${formatDate(checkOut)}).`,
+        contactInfo: {
+          phone: '+91 80 1234 5678',
+          email: 'reservations@ashokinn.com'
+        },
+        availableAlternatives,
+        error: `${category.name} is fully booked for these dates.` 
+      }
     }
 
     // Calculate nights and total amount
@@ -184,6 +232,20 @@ export async function createBooking(data: {
 
     revalidatePath('/rooms')
     revalidatePath('/admin/rooms')
+
+    // Trigger Nodemailer Booking Confirmation Email to Guest
+    sendBookingConfirmationEmail({
+      guestEmail: data.guestEmail,
+      guestName: data.guestName,
+      bookingRef: booking.bookingRef,
+      roomName: category.name,
+      checkIn: data.checkIn,
+      checkOut: data.checkOut,
+      nights,
+      guests: data.guests,
+      totalAmount,
+      specialRequests: data.specialRequests
+    }).catch(err => console.error('[Booking Email Background Trigger Error]:', err))
 
     return { success: true, bookingRef: booking.bookingRef }
   } catch (error) {
